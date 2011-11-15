@@ -100,19 +100,15 @@ class Masker
 end
 
 masker = Masker.new
-line_feeds = 0
-begin
-  c = $stdin.getc
-  
-  if masker.store_char(c)
-    next
-  end
+$stdin.each do |line|
+  line.each_char do |c|
+    if masker.store_char(c)
+      next
+    end
     
-  masker.mask
-  output c
-  
-  if c == "\n"
-    line_feeds += 1 
+    masker.mask
+    output c
   end
   
-end while line_feeds <= 20
+  $stdout.flush
+end
