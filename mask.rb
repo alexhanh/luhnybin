@@ -1,3 +1,5 @@
+# Author: Alexander Hanhikoski (alexander.hanhikoski)
+
 def debug(s)
   $stderr.puts(s)
 end
@@ -7,17 +9,14 @@ def output(s)
   print s
 end
 
-# todo: would storing start-end index pairs be faster instead of a masks hash?
 class Masker
   
   def initialize()
     @digits = "0123456789"
-    @cc_chars = "0123456789 -"
     
     reset
   end
     
-  # stores the character to the string and updates internal counters and data
   def store_char(c)
     is_digit = @digits.include? c
     return false unless is_digit or c == ' ' or c == '-'
@@ -49,7 +48,7 @@ class Masker
       return
     end
 
-    # holds indexes which should be masked in the 'chars' string
+    # holds indexes of the characters we should mask in the 'chars' string
     masks = {}
     
     # holds the maximum credit card length the string can contain
@@ -58,11 +57,13 @@ class Masker
   
     # check credit cards with different lengths, starting from 14
     for cc_length in 14..max_cc_length do
+    
       start_index = 0
       end_index = cc_length - 1
       
       # use brute-force to test out all possibilities
       while end_index < @digit_count do
+        
         if credit_card?(start_index, end_index)
           for i in start_index..end_index do
             masks[@digit_indices[i]] = true
