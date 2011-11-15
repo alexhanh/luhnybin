@@ -17,10 +17,12 @@ class Masker
     reset
   end
     
+  # stores the character to the string and updates internal counters and data
   def store_char(c)
-    return false unless @cc_chars.include? c
+    is_digit = @digits.include? c
+    return false unless is_digit or c == ' ' or c == '-'
     
-    if @digits.include? c
+    if is_digit
       @digit_count += 1
       @digit_indices << @current_index
     end
@@ -38,7 +40,7 @@ class Masker
     @chars = ""
   end
   
-  # prints out the string it's containing to STDOUT while masking out credit cards it finds
+  # prints out the string to STDOUT while masking out credit cards it finds
   def mask
     # can't contain a valid credit card number, so return immediately
     if @digit_count < 14
